@@ -1,0 +1,40 @@
+================================================================================
+RATING INDEX SUMMARY
+================================================================================
+
+Dataset: 59,946 profiles
+
+RATING INDEX COMPONENTS & WEIGHTS:
+--------------------------------------------------------------------------------
+  education_score     :   20% weight (mean = 3.23)
+  income_score        :   10% weight (mean = 1.13)
+  body_score          :   20% weight (mean = 3.94)
+  height_score        :   15% weight (mean = 4.58)
+  age_score           :   15% weight (mean = 3.82)
+  effort_score        :   20% weight (mean = 3.44)
+
+RATING INDEX STATISTICS:
+--------------------------------------------------------------------------------
+  Mean:   0.611
+  Median: 0.619
+  Std:    0.126
+  Min:    0.000
+  Max:    1.000
+
+RATING QUINTILES:
+--------------------------------------------------------------------------------
+  bottom_20   : 11,990 profiles (mean = 0.425)
+  low         : 11,989 profiles (mean = 0.550)
+  middle      : 11,989 profiles (mean = 0.619)
+  high        : 11,989 profiles (mean = 0.684)
+  top_20      : 11,989 profiles (mean = 0.777)
+
+================================================================================
+KEY FINDINGS:
+--------------------------------------------------------------------------------
+  - Education is the strongest predictor (r = 0.483)
+  - Body type highly correlated (r = 0.588)
+  - Effort/completeness matters (r = 0.438)
+  - Mean rating: Males = 0.629, Females = 0.584
+
+================================================================================

@@ -1,0 +1,46 @@
+================================================================================
+RELATIONSHIP GOALS CLASSIFICATION SUMMARY
+================================================================================
+
+Dataset: 59,946 profiles
+
+CLASSIFICATION METHOD:
+--------------------------------------------------------------------------------
+  - LTR keywords: 40 terms
+  - Casual keywords: 28 terms
+  - Ambiguous keywords: 14 terms
+  - Classification based on keyword frequency analysis
+  - Backup: status field for profiles with no essays
+
+DISTRIBUTION OF RELATIONSHIP GOALS:
+--------------------------------------------------------------------------------
+  ltr         : 32,792 ( 54.7%)
+  ambiguous   : 20,829 ( 34.7%)
+  casual      :  6,325 ( 10.6%)
+
+MEAN EFFORT AND RATING BY GOAL:
+--------------------------------------------------------------------------------
+  ltr         : Effort=0.736, Rating=0.621
+  ambiguous   : Effort=0.601, Rating=0.589
+  casual      : Effort=0.721, Rating=0.630
+
+GOALS BY DEMOGRAPHICS:
+--------------------------------------------------------------------------------
+  By Sex:
+    m: 51.4% LTR-oriented
+    f: 59.6% LTR-oriented
+
+  By Orientation:
+    straight  : 55.1% LTR-oriented
+    bisexual  : 49.5% LTR-oriented
+    gay       : 53.7% LTR-oriented
+
+================================================================================
+KEY FINDINGS:
+--------------------------------------------------------------------------------
+  - Most users are ambiguous (34.7%)
+  - LTR-oriented users: 32,792 (54.7%)
+  - Mean keyword counts: LTR=1.77, Casual=0.56
+  - LTR users have higher effort: 0.736 vs ambiguous 0.601
+
+================================================================================
