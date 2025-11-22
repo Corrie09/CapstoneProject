@@ -1,0 +1,75 @@
+================================================================================
+OKCUPID DATASET - INITIAL EXPLORATION SUMMARY
+================================================================================
+
+Dataset Shape: 59,946 rows × 31 columns
+
+MISSING VALUES:
+--------------------------------------------------------------------------------
+     Column  Missing_Count  Missing_Percent Data_Type
+  offspring          35561            59.32    object
+       diet          24395            40.69    object
+   religion          20226            33.74    object
+       pets          19921            33.23    object
+     essay8          19225            32.07    object
+      drugs          14080            23.49    object
+     essay6          13771            22.97    object
+     essay9          12603            21.02    object
+     essay7          12451            20.77    object
+     essay3          11476            19.14    object
+       sign          11056            18.44    object
+     essay5          10850            18.10    object
+     essay4          10537            17.58    object
+     essay2           9638            16.08    object
+        job           8198            13.68    object
+     essay1           7572            12.63    object
+  education           6628            11.06    object
+  ethnicity           5680             9.48    object
+     smokes           5512             9.19    object
+     essay0           5488             9.15    object
+  body_type           5296             8.83    object
+     drinks           2985             4.98    object
+     speaks             50             0.08    object
+     height              3             0.01   float64
+   location              0             0.00    object
+     income              0             0.00     int64
+last_online              0             0.00    object
+        sex              0             0.00    object
+     status              0             0.00    object
+        age              0             0.00     int64
+orientation              0             0.00    object
+
+COLUMN DATA TYPES:
+--------------------------------------------------------------------------------
+age              int64
+status          object
+sex             object
+orientation     object
+body_type       object
+diet            object
+drinks          object
+drugs           object
+education       object
+ethnicity       object
+height         float64
+income           int64
+job             object
+last_online     object
+location        object
+offspring       object
+pets            object
+religion        object
+sign            object
+smokes          object
+speaks          object
+essay0          object
+essay1          object
+essay2          object
+essay3          object
+essay4          object
+essay5          object
+essay6          object
+essay7          object
+essay8          object
+essay9          object
+
