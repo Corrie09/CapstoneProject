@@ -59,3 +59,10 @@ Summary stats for all key variables (raw and constructed)
 By subgroups: gender, orientation, goal type
 Market-level statistics
 Correlation matrix of key variables
+
+
+
+
+
+
+did i calculate effort on a data set with no empty values anymore? 
