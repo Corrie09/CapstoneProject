@@ -1,0 +1,15 @@
+{
+  "mean_rating": 0.6110034568619552,
+  "std_rating": 0.1259912233713912,
+  "alpha_rating": 8.537551277762683,
+  "beta_rating": 5.435448681371072,
+  "ltr_share": 0.547025656424115,
+  "market_clarity": 0.6877453791745904,
+  "market_clarity_std": 0.03010326009748188,
+  "mean_effort": 0.6877473322481461,
+  "std_effort": 0.18930801913233142,
+  "K": 20,
+  "rho_i0_ltr": 0.6,
+  "rho_i0_casual": 0.4,
+  "tau_i_suggested": 10
+}
