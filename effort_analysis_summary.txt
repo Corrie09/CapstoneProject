@@ -1,0 +1,37 @@
+================================================================================
+EFFORT INDEX ANALYSIS SUMMARY
+================================================================================
+
+Dataset: 59,946 profiles
+
+EFFORT INDEX COMPONENTS:
+--------------------------------------------------------------------------------
+  1. Essay Words (40% weight): Mean = 357, Median = 299
+  2. Essay Completion (30% weight): Mean = 8.1/10
+  3. Demographic Completeness (30% weight): Mean = 81.5%
+
+EFFORT INDEX STATISTICS:
+--------------------------------------------------------------------------------
+  Mean:   0.688
+  Median: 0.718
+  Std:    0.189
+  Min:    0.102
+  Max:    1.000
+
+EFFORT DISTRIBUTION:
+--------------------------------------------------------------------------------
+  very_low    :  1,610 (  2.7%)
+  low         :  8,263 ( 13.8%)
+  medium      : 24,128 ( 40.2%)
+  high        : 25,945 ( 43.3%)
+
+================================================================================
+KEY FINDINGS:
+--------------------------------------------------------------------------------
+  - Average user completes 8.1 out of 10 essays
+  - Average essay length: 42 words
+  - 9,873 profiles (16.5%) show low effort
+  - Education level correlates 0.073 with effort
+  - 136 markets have sufficient data (>=20 profiles)
+
+================================================================================

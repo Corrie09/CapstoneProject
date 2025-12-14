@@ -1,0 +1,40 @@
+================================================================================
+MARKET-LEVEL ANALYSIS SUMMARY
+================================================================================
+
+Dataset: 59,946 profiles across 508 markets
+
+KEY MARKET METRICS:
+--------------------------------------------------------------------------------
+  Mean target market LTR share (ρ_m): 0.547
+  Mean target market effort: 0.688
+  Mean target market rating: 0.619
+  Mean competition ratio: 1.189
+  Mean target market size: 6648
+
+EFFORT BY MARKET SERIOUSNESS:
+--------------------------------------------------------------------------------
+  low_ltr     : 0.670 (n=765)
+  medium_ltr  : 0.687 (n=34,298)
+  high_ltr    : 0.689 (n=24,883)
+
+EFFORT BY MARKET SERIOUSNESS (LTR USERS ONLY):
+--------------------------------------------------------------------------------
+  low_ltr     : 0.750 (n=264)
+  medium_ltr  : 0.741 (n=17,364)
+  high_ltr    : 0.731 (n=15,164)
+
+================================================================================
+KEY FINDINGS FOR FRUSTRATION HYPOTHESIS:
+--------------------------------------------------------------------------------
+  1. Users in low-LTR markets have effort: 0.670
+  2. Users in high-LTR markets have effort: 0.689
+  3. Difference: 0.019 (higher in high-LTR markets)
+  4. Correlation (target LTR share, effort): 0.011
+
+  For LTR-oriented users specifically:
+  - Effort in low-LTR markets: 0.750
+  - Effort in high-LTR markets: 0.731
+  - Difference: -0.019
+
+================================================================================

@@ -1,0 +1,47 @@
+================================================================================
+RATING INDEX SUMMARY - FIXED VERSION
+================================================================================
+⚠️  CRITICAL FIX: Effort removed from rating calculation
+   - Rating (r_i) = Fixed characteristics only
+   - Effort (E_i) = Outcome variable (responds to market conditions)
+================================================================================
+
+Dataset: 59,946 profiles
+
+RATING INDEX COMPONENTS & WEIGHTS:
+--------------------------------------------------------------------------------
+  education_score     :   25% weight (mean = 3.23)
+  income_score        :   15% weight (mean = 1.13)
+  body_score          :   30% weight (mean = 3.94)
+  height_score        :   15% weight (mean = 4.58)
+  age_score           :   15% weight (mean = 3.82)
+  TOTAL               :  100%
+
+  ⚠️  EFFORT EXCLUDED (effort is outcome, not predictor)
+
+RATING INDEX STATISTICS:
+--------------------------------------------------------------------------------
+  Mean:   0.619
+  Median: 0.622
+  Std:    0.119
+  Min:    0.000
+  Max:    1.000
+
+RATING QUINTILES:
+--------------------------------------------------------------------------------
+  bottom_20   : 12,472 profiles (mean = 0.448)
+  low         : 12,137 profiles (mean = 0.561)
+  middle      : 11,638 profiles (mean = 0.627)
+  high        : 11,725 profiles (mean = 0.694)
+  top_20      : 11,974 profiles (mean = 0.774)
+
+================================================================================
+KEY FINDINGS:
+--------------------------------------------------------------------------------
+  - Body type is strongest predictor (r = 0.769)
+  - Education highly correlated (r = 0.492)
+  - Age matters (r = 0.437)
+  - Effort correlation: -0.009 (positive but NOT causal - effort responds to markets)
+  - Mean rating: Males = 0.642, Females = 0.584
+
+================================================================================

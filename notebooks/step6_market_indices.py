@@ -28,7 +28,7 @@ print("="*80)
 print("\n[1] Loading dataset with relationship goals...")
 
 try:
-    df = pd.read_csv('data/okcupid_with_goals.csv')
+    df = pd.read_csv('okcupid_with_goals.csv')
     print(f"✓ Data loaded successfully! Shape: {df.shape}")
 except FileNotFoundError:
     print("✗ Error: 'okcupid_with_goals.csv' not found.")

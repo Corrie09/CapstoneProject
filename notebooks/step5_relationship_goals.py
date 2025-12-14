@@ -27,10 +27,10 @@ print("="*80)
 print("\n[1] Loading dataset with ratings...")
 
 try:
-    df = pd.read_csv('data/okcupid_with_ratings.csv')
+    df = pd.read_csv('data/okcupid_with_ratings_FIXED.csv')
     print(f"✓ Data loaded successfully! Shape: {df.shape}")
 except FileNotFoundError:
-    print("✗ Error: 'okcupid_with_ratings.csv' not found.")
+    print("✗ Error: 'okcupid_with_ratings_FIXED.csv' not found.")
     print("Please run step4_rating_index.py first!")
     exit()
 
