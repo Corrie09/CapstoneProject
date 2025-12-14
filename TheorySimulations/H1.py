@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 sns.set_style("whitegrid")
-plt.rcParams['figure.figsize'] = (12, 5)
 
 # ============================================================================
 # PARAMETERS
@@ -163,28 +162,37 @@ for market_name, users_df in all_users.items():
         print(f"    Final retention: {100*final_retention:.0f}%")
 
 # ============================================================================
-# VISUALIZATION - TWO PANELS
+# FIGURE 1: LT USER RETENTION BY MARKET TYPE
 # ============================================================================
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+fig, ax = plt.subplots(figsize=(8, 5))
 
 colors = {'LT-poor': '#d62728', 'Balanced': '#ff7f0e', 'LT-rich': '#2ca02c'}
 
-# Panel 1: LT User Retention
 for market_name, results_df in all_results.items():
-    ax1.plot(results_df['period'], results_df['retention_L'], 
+    ax.plot(results_df['period'], results_df['retention_L'], 
             label=f"{market_name}", 
             linewidth=2.5,
             color=colors[market_name])
 
-ax1.set_xlabel('Period', fontsize=12)
-ax1.set_ylabel('LT User Retention Rate', fontsize=12)
-ax1.set_title('(a) LT User Retention by Market Type', fontsize=13, fontweight='bold')
-ax1.legend(fontsize=10)
-ax1.grid(True, alpha=0.3)
-ax1.set_ylim([0, 1.05])
+ax.set_xlabel('Period', fontsize=13)
+ax.set_ylabel('LT User Retention Rate', fontsize=13)
+ax.set_title('LT User Retention by Market Type', fontsize=14, fontweight='bold')
+ax.legend(fontsize=11, loc='upper right')
+ax.grid(True, alpha=0.3)
+ax.set_ylim([0, 1.05])
 
-# Panel 2: Frustration Rate by Market
+plt.tight_layout()
+plt.savefig('H1_retention_curves.png', dpi=300, bbox_inches='tight')
+print("\n✓ Saved: H1_retention_curves.png")
+plt.show()
+
+# ============================================================================
+# FIGURE 2: LT USER EXIT MECHANISM BY MARKET
+# ============================================================================
+
+fig, ax = plt.subplots(figsize=(7, 5))
+
 frustration_rates = []
 for market_name in ['LT-poor', 'Balanced', 'LT-rich']:
     users_df = all_users[market_name]
@@ -196,20 +204,22 @@ for market_name in ['LT-poor', 'Balanced', 'LT-rich']:
     frust_rate = frust_L / total_exits_L if total_exits_L > 0 else 0
     frustration_rates.append(frust_rate)
 
-ax2.bar(['LT-poor', 'Balanced', 'LT-rich'], frustration_rates,
-        color=[colors['LT-poor'], colors['Balanced'], colors['LT-rich']],
-        alpha=0.8)
-ax2.set_ylabel('Frustration Exit Rate (LT Users)', fontsize=12)
-ax2.set_title('(b) LT User Exit Mechanism by Market', fontsize=13, fontweight='bold')
-ax2.grid(True, alpha=0.3, axis='y')
-ax2.set_ylim([0, 1.0])
+ax.bar(['LT-poor', 'Balanced', 'LT-rich'], frustration_rates,
+       color=[colors['LT-poor'], colors['Balanced'], colors['LT-rich']],
+       alpha=0.8)
+ax.set_ylabel('Frustration Exit Rate (LT Users)', fontsize=13)
+ax.set_title('LT User Exit Mechanism by Market', fontsize=14, fontweight='bold')
+ax.grid(True, alpha=0.3, axis='y')
+ax.set_ylim([0, 1.0])
 
 # Add percentage labels on bars
 for i, rate in enumerate(frustration_rates):
-    ax2.text(i, rate + 0.02, f'{100*rate:.0f}%', ha='center', fontsize=11, fontweight='bold')
+    ax.text(i, rate + 0.02, f'{100*rate:.0f}%', 
+            ha='center', fontsize=12, fontweight='bold')
 
 plt.tight_layout()
-plt.savefig('H1_retention_analysis.png', dpi=300, bbox_inches='tight')
+plt.savefig('H1_exit_mechanism.png', dpi=300, bbox_inches='tight')
+print("✓ Saved: H1_exit_mechanism.png")
 plt.show()
 
 # ============================================================================
