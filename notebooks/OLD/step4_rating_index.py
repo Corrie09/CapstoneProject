@@ -1,10 +1,6 @@
 """
-Step 4: Build Rating Index (r_i) - FIXED VERSION
+Step 4: Build Rating Index (r_i)
 OkCupid Dating App Project
-
-CRITICAL FIX: Removed effort from rating index to avoid circular logic
-- Rating (r_i) = FIXED characteristics only (education, income, body, height, age)
-- Effort (E_i) = OUTCOME variable that responds to market conditions
 
 This script creates a desirability rating index (r_i) for each user based on:
 - Education level
@@ -12,6 +8,7 @@ This script creates a desirability rating index (r_i) for each user based on:
 - Body type
 - Height (relative to gender norms)
 - Age (younger generally preferred in dating markets)
+- Profile effort/completeness
 
 The rating index will be normalized to [0,1] and used for:
 1. Identifying user's position in the market
@@ -27,11 +24,7 @@ from sklearn.preprocessing import StandardScaler
 from scipy import stats
 
 print("="*80)
-print("STEP 4: BUILD RATING INDEX (r_i) - FIXED VERSION")
-print("="*80)
-print("\n⚠️  IMPORTANT: This version excludes EFFORT from rating")
-print("   - Rating = Fixed characteristics (education, income, body, height, age)")
-print("   - Effort = Outcome variable to be explained by rating × market conditions")
+print("STEP 4: BUILD RATING INDEX (r_i)")
 print("="*80)
 
 # ============================================================================
@@ -161,13 +154,18 @@ df_rating['age_score'] = df_rating['age'].apply(calculate_age_score)
 print(f"  ✓ Age score: mean = {df_rating['age_score'].mean():.2f}")
 print(f"    Distribution: {df_rating['age_score'].value_counts().sort_index().to_dict()}")
 
+# ----- EFFORT/COMPLETENESS -----
+# Already have effort_index (0-1), scale to 0-5
+df_rating['effort_score'] = df_rating['effort_index'] * 5
+print(f"  ✓ Effort score: mean = {df_rating['effort_score'].mean():.2f}")
+
 # ============================================================================
 # 2. HANDLE MISSING VALUES IN COMPONENTS
 # ============================================================================
 print("\n[3] Handling missing values...")
 
 rating_components = ['education_score', 'income_score', 'body_score', 
-                     'height_score', 'age_score']
+                     'height_score', 'age_score', 'effort_score']
 
 for component in rating_components:
     missing_count = df_rating[component].isna().sum()
@@ -191,25 +189,24 @@ for component in rating_components:
 print(f"  ✓ Missing values imputed")
 
 # ============================================================================
-# 3. CALCULATE COMPOSITE RATING INDEX (WITHOUT EFFORT)
+# 3. CALCULATE COMPOSITE RATING INDEX
 # ============================================================================
 print("\n[4] Calculating composite rating index...")
-print("\n⚠️  KEY CHANGE: Rating excludes effort (effort is outcome, not input)")
 
-# NEW WEIGHTS - redistributed without effort component
-# Total must sum to 1.0
+# Weights for each component
+# Income gets lower weight since only 19% report it
 WEIGHTS = {
-    'education_score': 0.25,   # Increased from 0.20
-    'income_score': 0.15,      # Increased from 0.10
-    'body_score': 0.30,        # Increased from 0.20 (most visible trait)
-    'height_score': 0.15,      # Same
-    'age_score': 0.15,         # Same
+    'education_score': 0.20,
+    'income_score': 0.10,    # Lower weight due to missingness
+    'body_score': 0.20,
+    'height_score': 0.15,
+    'age_score': 0.15,
+    'effort_score': 0.20
 }
 
-print(f"  Component weights (without effort):")
+print(f"  Component weights:")
 for component, weight in WEIGHTS.items():
     print(f"    {component:20s}: {weight:.0%}")
-print(f"  {'TOTAL':20s}: {sum(WEIGHTS.values()):.0%}")
 
 # Calculate weighted average
 df_rating['rating_raw'] = sum(
@@ -217,7 +214,7 @@ df_rating['rating_raw'] = sum(
     for component, weight in WEIGHTS.items()
 )
 
-print(f"\n  ✓ Raw rating calculated (WITHOUT effort)")
+print(f"\n  ✓ Raw rating calculated")
 print(f"    - Mean: {df_rating['rating_raw'].mean():.3f}")
 print(f"    - Median: {df_rating['rating_raw'].median():.3f}")
 print(f"    - Std: {df_rating['rating_raw'].std():.3f}")
@@ -296,26 +293,22 @@ correlations = pd.DataFrame({
         'Income Score',
         'Body Score',
         'Height Score',
-        'Age Score'
+        'Age Score',
+        'Effort Score'
     ],
     'Correlation_with_Rating': [
         df_rating[['education_score', 'rating_index']].corr().iloc[0, 1],
         df_rating[['income_score', 'rating_index']].corr().iloc[0, 1],
         df_rating[['body_score', 'rating_index']].corr().iloc[0, 1],
         df_rating[['height_score', 'rating_index']].corr().iloc[0, 1],
-        df_rating[['age_score', 'rating_index']].corr().iloc[0, 1]
+        df_rating[['age_score', 'rating_index']].corr().iloc[0, 1],
+        df_rating[['effort_score', 'rating_index']].corr().iloc[0, 1]
     ]
 })
 
 correlations = correlations.sort_values('Correlation_with_Rating', ascending=False)
 print("\nComponent correlations with rating index:")
 print(correlations.to_string(index=False))
-
-# Also check correlation with effort (should still be positive, but effort NOT in rating)
-effort_corr = df_rating[['effort_index', 'rating_index']].corr().iloc[0, 1]
-print(f"\n⚠️  Effort correlation with rating: {effort_corr:.3f}")
-print(f"   (Positive correlation is expected even though effort is NOT in rating)")
-print(f"   (This shows high-rated people also put in more effort - but effort can still respond to markets)")
 
 # ============================================================================
 # 7. VISUALIZATIONS
@@ -327,7 +320,7 @@ try:
     
     # 1. Distribution of rating index
     axes[0, 0].hist(df_rating['rating_index'], bins=50, edgecolor='black', color='purple', alpha=0.7)
-    axes[0, 0].set_title('Distribution of Rating Index (Fixed)', fontsize=12, fontweight='bold')
+    axes[0, 0].set_title('Distribution of Rating Index', fontsize=12, fontweight='bold')
     axes[0, 0].set_xlabel('Rating Index (r_i)')
     axes[0, 0].set_ylabel('Count')
     axes[0, 0].axvline(df_rating['rating_index'].mean(), color='red', linestyle='--',
@@ -384,11 +377,10 @@ try:
     axes[1, 2].set_xticks(range(len(rating_by_age)))
     axes[1, 2].set_xticklabels(rating_by_age.index, rotation=45)
     
-    # 7. Scatter: Rating vs Effort (IMPORTANT - shows they're correlated but effort NOT in rating)
+    # 7. Scatter: Rating vs Effort
     sample = df_rating.sample(min(5000, len(df_rating)))
     axes[2, 0].scatter(sample['effort_index'], sample['rating_index'], alpha=0.3, s=10)
-    axes[2, 0].set_title(f'Rating vs Effort (r={effort_corr:.2f})\nEffort NOT in rating!', 
-                         fontsize=12, fontweight='bold')
+    axes[2, 0].set_title('Rating vs Effort Index', fontsize=12, fontweight='bold')
     axes[2, 0].set_xlabel('Effort Index')
     axes[2, 0].set_ylabel('Rating Index')
     
@@ -400,18 +392,18 @@ try:
     
     # 9. Correlation heatmap
     corr_data = df_rating[['education_score', 'income_score', 'body_score', 
-                            'height_score', 'age_score', 'rating_index']].corr()
+                            'height_score', 'age_score', 'effort_score', 'rating_index']].corr()
     im = axes[2, 2].imshow(corr_data, cmap='coolwarm', aspect='auto', vmin=-1, vmax=1)
     axes[2, 2].set_xticks(range(len(corr_data.columns)))
     axes[2, 2].set_yticks(range(len(corr_data.columns)))
-    axes[2, 2].set_xticklabels(['Edu', 'Inc', 'Body', 'Hgt', 'Age', 'Rating'], rotation=45, ha='right')
-    axes[2, 2].set_yticklabels(['Edu', 'Inc', 'Body', 'Hgt', 'Age', 'Rating'])
-    axes[2, 2].set_title('Component Correlations (Fixed)', fontsize=12, fontweight='bold')
+    axes[2, 2].set_xticklabels(['Edu', 'Inc', 'Body', 'Hgt', 'Age', 'Eff', 'Rating'], rotation=45, ha='right')
+    axes[2, 2].set_yticklabels(['Edu', 'Inc', 'Body', 'Hgt', 'Age', 'Eff', 'Rating'])
+    axes[2, 2].set_title('Component Correlations', fontsize=12, fontweight='bold')
     plt.colorbar(im, ax=axes[2, 2])
     
     plt.tight_layout()
-    plt.savefig('rating_index_analysis_FIXED.png', dpi=150, bbox_inches='tight')
-    print("  ✓ Visualizations saved to 'rating_index_analysis_FIXED.png'")
+    plt.savefig('rating_index_analysis.png', dpi=150, bbox_inches='tight')
+    print("  ✓ Visualizations saved to 'rating_index_analysis.png'")
     
 except Exception as e:
     print(f"  ⚠ Visualization error (non-critical): {e}")
@@ -423,23 +415,19 @@ print("\n[9] Saving results...")
 
 # Add rating columns to original dataframe
 rating_cols = ['education_score', 'income_score', 'body_score', 'height_score', 
-               'age_score', 'rating_raw', 'rating_index', 'rating_quintile']
+               'age_score', 'effort_score', 'rating_raw', 'rating_index', 'rating_quintile']
 
 for col in rating_cols:
     df[col] = df_rating[col]
 
 # Save full dataset
-df.to_csv('data/okcupid_with_ratings_FIXED.csv', index=False)
-print(f"  ✓ Dataset with FIXED ratings saved: 'data/okcupid_with_ratings_FIXED.csv'")
+df.to_csv('okcupid_with_ratings.csv', index=False)
+print(f"  ✓ Dataset with ratings saved: 'okcupid_with_ratings.csv'")
 
 # Save summary
-with open('rating_index_summary_FIXED.txt', 'w', encoding='utf-8') as f:
+with open('rating_index_summary.txt', 'w', encoding='utf-8') as f:
     f.write("="*80 + "\n")
-    f.write("RATING INDEX SUMMARY - FIXED VERSION\n")
-    f.write("="*80 + "\n")
-    f.write("⚠️  CRITICAL FIX: Effort removed from rating calculation\n")
-    f.write("   - Rating (r_i) = Fixed characteristics only\n")
-    f.write("   - Effort (E_i) = Outcome variable (responds to market conditions)\n")
+    f.write("RATING INDEX SUMMARY\n")
     f.write("="*80 + "\n\n")
     
     f.write(f"Dataset: {len(df):,} profiles\n\n")
@@ -449,8 +437,6 @@ with open('rating_index_summary_FIXED.txt', 'w', encoding='utf-8') as f:
     for component, weight in WEIGHTS.items():
         mean_val = df_rating[component].mean()
         f.write(f"  {component:20s}: {weight:5.0%} weight (mean = {mean_val:.2f})\n")
-    f.write(f"  {'TOTAL':20s}: {sum(WEIGHTS.values()):5.0%}\n")
-    f.write(f"\n  ⚠️  EFFORT EXCLUDED (effort is outcome, not predictor)\n")
     
     f.write("\nRATING INDEX STATISTICS:\n")
     f.write("-"*80 + "\n")
@@ -470,31 +456,27 @@ with open('rating_index_summary_FIXED.txt', 'w', encoding='utf-8') as f:
     f.write("\n" + "="*80 + "\n")
     f.write("KEY FINDINGS:\n")
     f.write("-"*80 + "\n")
-    f.write(f"  - Body type is strongest predictor (r = {df[['body_score', 'rating_index']].corr().iloc[0, 1]:.3f})\n")
-    f.write(f"  - Education highly correlated (r = {df[['education_score', 'rating_index']].corr().iloc[0, 1]:.3f})\n")
-    f.write(f"  - Age matters (r = {df[['age_score', 'rating_index']].corr().iloc[0, 1]:.3f})\n")
-    f.write(f"  - Effort correlation: {effort_corr:.3f} (positive but NOT causal - effort responds to markets)\n")
+    f.write(f"  - Education is the strongest predictor (r = {df[['education_score', 'rating_index']].corr().iloc[0, 1]:.3f})\n")
+    f.write(f"  - Body type highly correlated (r = {df[['body_score', 'rating_index']].corr().iloc[0, 1]:.3f})\n")
+    f.write(f"  - Effort/completeness matters (r = {df[['effort_score', 'rating_index']].corr().iloc[0, 1]:.3f})\n")
     f.write(f"  - Mean rating: Males = {df[df['sex']=='m']['rating_index'].mean():.3f}, Females = {df[df['sex']=='f']['rating_index'].mean():.3f}\n")
     f.write("\n" + "="*80 + "\n")
 
-print("  ✓ Summary saved: 'rating_index_summary_FIXED.txt'")
+print("  ✓ Summary saved: 'rating_index_summary.txt'")
 
 # ============================================================================
 # DONE
 # ============================================================================
 print("\n" + "="*80)
-print("RATING INDEX COMPLETE! (FIXED VERSION)")
+print("RATING INDEX COMPLETE!")
 print("="*80)
 print(f"\nFiles created:")
-print(f"  1. data/okcupid_with_ratings_FIXED.csv (dataset with FIXED rating index)")
-print(f"  2. rating_index_summary_FIXED.txt (summary report)")
-print(f"  3. rating_index_analysis_FIXED.png (visualizations)")
-print(f"\nKey changes from original:")
-print(f"  ✓ Removed effort from rating calculation")
-print(f"  ✓ Redistributed weights: body 30%, education 25%, income 15%, height 15%, age 15%")
-print(f"  ✓ Rating now represents FIXED desirability only")
-print(f"  ✓ Effort remains as OUTCOME variable in dataset")
-print(f"\nNext step: Re-run Steps 5-6 with this fixed rating index")
-print(f"  - Step 5: python step5_relationship_goals.py (should work with FIXED ratings)")
-print(f"  - Step 6: python step6_market_indices.py (will create final analysis-ready data)")
+print(f"  1. okcupid_with_ratings.csv (dataset with rating index)")
+print(f"  2. rating_index_summary.txt (summary report)")
+print(f"  3. rating_index_analysis.png (visualizations)")
+print(f"\nKey variables added:")
+print(f"  - Component scores: education_score, income_score, body_score, height_score, age_score, effort_score")
+print(f"  - rating_index (0-1 scale) - THE KEY DESIRABILITY MEASURE")
+print(f"  - rating_quintile (bottom_20, low, middle, high, top_20)")
+print("\nNext step: Step 5 - Classify relationship goals from essays (g_i)")
 print("="*80)
